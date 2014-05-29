@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2014 Proxima Centauri SRL <info@proxima-centauri.it>.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Proxima Centauri SRL <info@proxima-centauri.it> - initial API and implementation
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- Configuration file -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:jeerpda.properties</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- cors support -->
+	<bean class="it.proximacentauri.ienergy.da.filter.CorsFilter" id="cors" />
+
+	<!-- json callback support -->
+	<bean class="it.proximacentauri.ienergy.da.filter.JsonpCallbackFilter" id="jsonpCallbackFilter" />
+
+
+	<!-- Connection pool -->
+	<bean id="dbDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+	</bean>
+
+	<!-- EntityManager -->
+	<bean id="entityManager" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dbDataSource" />
+		<property name="loadTimeWeaver">
+			<bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
+		</property>
+		<property name="persistenceUnitName" value="indexUnit" />
+	</bean>
+
+	<!-- Enable jpa transaction manager -->
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManager" />
+	</bean>
+
+	<!-- post-processors for all standard config annotations like jpa -->
+	<context:annotation-config />
+
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- Dao definition -->
+	<bean id="confortDao" class="it.proximacentauri.ienergy.da.dao.impl.ConfortDaoImpl" scope="singleton" />
+	<bean id="measureDao" class="it.proximacentauri.ienergy.da.dao.impl.MeasureDaoImpl" scope="singleton" />
+	<bean id="registryDao" class="it.proximacentauri.ienergy.da.dao.impl.DrainDescriptorDaoImpl" scope="singleton" />
+
+	<!-- service definition -->
+	<bean id="measureService" class="it.proximacentauri.ienergy.da.service.impl.MeasureServiceImpl" scope="singleton" />
+	<bean id="registryService" class="it.proximacentauri.ienergy.da.service.impl.RegistryServiceImpl" scope="singleton" />
+</beans>

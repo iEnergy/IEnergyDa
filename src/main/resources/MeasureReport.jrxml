@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.5.0-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MeasureReport" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isIgnorePagination="true" uuid="2ac60d89-ab86-467b-b17a-07b78d84873a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MeasureDataAdapter"/>
+	<parameter name="DESC" class="it.proximacentauri.ienergy.da.domain.DrainDescriptor"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="desc" class="it.proximacentauri.ienergy.da.domain.DrainDescriptor">
+		<fieldDescription><![CDATA[desc]]></fieldDescription>
+	</field>
+	<field name="time" class="java.util.Date">
+		<fieldDescription><![CDATA[time]]></fieldDescription>
+	</field>
+	<field name="value" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[value]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="41" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="141" height="41" uuid="65a054d3-d277-450f-8ff4-d7126cead124"/>
+				<text><![CDATA[time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="0" width="138" height="41" uuid="06449f34-27e5-4740-8c01-7b6bbfd0aaf3"/>
+				<text><![CDATA[drain]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="0" width="138" height="41" uuid="831bea74-d1f6-4add-bd49-af74fdc15f46"/>
+				<text><![CDATA[value]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="417" y="0" width="138" height="41" uuid="970c5665-0103-44fd-9609-6d9509c1165d"/>
+				<text><![CDATA[unit]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Prevent">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<textField pattern="d/M/yy HH:mm">
+				<reportElement x="0" y="0" width="141" height="30" uuid="21ba470c-2da3-40af-b27f-16ffb5db4fa4"/>
+				<textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="0" width="138" height="30" uuid="34f78628-b7cc-4c02-b707-f67480897e4c"/>
+				<textFieldExpression><![CDATA[$P{DESC}.getDrain()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="279" y="0" width="138" height="30" uuid="36cb8773-2427-4936-b8cd-f084b6ed361d"/>
+				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="417" y="0" width="138" height="30" uuid="355e347c-f996-4d6f-926e-1e5f7beb8793"/>
+				<textFieldExpression><![CDATA[$P{DESC}.getUnit()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
